@@ -1,0 +1,12 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.CallerApp" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <item name="colorPrimaryDark">@color/notificationColor</item>
+        <item name="colorPrimary">#FFC107</item>
+        <item name="colorAccent">#E91E63</item>
+
+    </style>
+
+    <style name="Theme.CallerApp" parent="Base.Theme.CallerApp" />
+</resources>
