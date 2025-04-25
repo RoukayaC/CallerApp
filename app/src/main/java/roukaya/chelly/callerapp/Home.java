@@ -1,21 +1,21 @@
 package roukaya.chelly.callerapp;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 
 public class Home extends AppCompatActivity {
-    Button btadd, btshow;
+    Button btAdd, btShow, btLogout, btExit;
     TextView welcome;
     public static ArrayList<Contact> data = new ArrayList<Contact>();
-    private Contact_Manager mg;
+    private Contact_Manager manager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,8 +23,10 @@ public class Home extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         // Find views by ID
-        btadd = findViewById(R.id.btn_addc_home);
-        btshow = findViewById(R.id.btn_showc_home);
+        btAdd = findViewById(R.id.btn_addc_home);
+        btShow = findViewById(R.id.btn_showc_home);
+        btLogout = findViewById(R.id.btn_logout_home);
+        btExit = findViewById(R.id.btn_exit_home);
         welcome = findViewById(R.id.tv_title_home);
 
         // Get username from login screen
@@ -32,17 +34,18 @@ public class Home extends AppCompatActivity {
         if (x.hasExtra("Name")) {
             Bundle b = x.getExtras();
             String name = b.getString("Name");
-            welcome.setText("Welcome Ms. " + name);
+            welcome.setText("Welcome Mm. " + name);
         }
 
         // Initialize Contact_Manager
-        mg = new Contact_Manager(Home.this);
-        mg.Ouvrir();
+        manager = new Contact_Manager(Home.this);
+        manager.Ouvrir();
 
-        // Initial load of contacts
-        data = mg.getAllContacts();
+        // Load contacts
+        data = manager.getAllContacts();
 
-        btadd.setOnClickListener(new View.OnClickListener() {
+        // Add contact button
+        btAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(Home.this, Add_Contact.class);
@@ -50,18 +53,40 @@ public class Home extends AppCompatActivity {
             }
         });
 
-        btshow.setOnClickListener(new View.OnClickListener() {
+        // Show contacts button
+        btShow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // Refresh data before showing
-                data = mg.getAllContacts();
+                data = manager.getAllContacts();
 
-                if (data.size() > 0) {
-                    Intent i = new Intent(Home.this, Affiche.class);
-                    startActivity(i);
-                } else {
-                    Toast.makeText(Home.this, "No contacts to display", Toast.LENGTH_SHORT).show();
-                }
+                Intent i = new Intent(Home.this, Affiche.class);
+                startActivity(i);
+            }
+        });
+
+        // Logout button
+        btLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Clear login status
+                SharedPreferences prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putBoolean("isLoggedIn", false);
+                editor.apply();
+
+                // Go back to login screen
+                Intent i = new Intent(Home.this, MainActivity.class);
+                startActivity(i);
+                finish();
+            }
+        });
+
+        // Exit button
+        btExit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
             }
         });
     }
@@ -70,8 +95,8 @@ public class Home extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         // Refresh data when returning to this activity
-        if (mg != null) {
-            data = mg.getAllContacts();
+        if (manager != null) {
+            data = manager.getAllContacts();
         }
     }
 
@@ -79,8 +104,8 @@ public class Home extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         // Close the database connection
-        if (mg != null) {
-            mg.fermer();
+        if (manager != null) {
+            manager.fermer();
         }
     }
 }

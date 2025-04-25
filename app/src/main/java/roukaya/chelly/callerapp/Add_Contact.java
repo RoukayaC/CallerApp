@@ -37,41 +37,50 @@ public class Add_Contact extends AppCompatActivity {
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Check if fields are not empty
-                if (firstname.getText().toString().isEmpty() ||
-                        lastname.getText().toString().isEmpty() ||
-                        phone.getText().toString().isEmpty()) {
+                // Get values from fields
+                String firstnameText = firstname.getText().toString().trim();
+                String lastnameText = lastname.getText().toString().trim();
+                String phoneText = phone.getText().toString().trim();
 
-                    Toast.makeText(Add_Contact.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
+                // Validate input
+                if (firstnameText.isEmpty()) {
+                    firstname.setError("First name is required");
+                    return;
+                }
+
+                if (lastnameText.isEmpty()) {
+                    lastname.setError("Last name is required");
+                    return;
+                }
+
+                if (phoneText.isEmpty()) {
+                    phone.setError("Phone number is required");
                     return;
                 }
 
                 // Create a new contact
-                Contact c = new Contact(
-                        firstname.getText().toString(),
-                        lastname.getText().toString(),
-                        phone.getText().toString()
-                );
+                Contact c = new Contact(firstnameText, lastnameText, phoneText);
 
-                // Add the contact to the database
-                long g = mg.ajout(c.firstname, c.lastname, c.phone);
+                // Add to database
+                long insertResult = mg.ajout(c.firstname, c.lastname, c.phone);
 
-                if (g > 0) {
-                    // Show success message
+                if (insertResult > 0) {
+                    // Success
                     result.setText("Contact added successfully!");
                     Toast.makeText(Add_Contact.this, "Contact added successfully!", Toast.LENGTH_SHORT).show();
 
-                    // Clear the input fields
+                    // Clear fields
                     firstname.setText("");
                     lastname.setText("");
                     phone.setText("");
 
-                    // Update the static data in Home
+                    // Update the static data list
                     if (Home.data != null) {
                         Home.data = mg.getAllContacts();
                     }
                 } else {
-                    result.setText("Failed to add contact");
+                    // Failed
+                    result.setText("Failed to add contact.");
                     Toast.makeText(Add_Contact.this, "Failed to add contact", Toast.LENGTH_SHORT).show();
                 }
             }

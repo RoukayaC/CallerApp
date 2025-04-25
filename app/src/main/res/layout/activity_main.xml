@@ -63,11 +63,21 @@
             android:inputType="numberPassword" />
     </LinearLayout>
 
+    <!-- Add Remember Me Checkbox -->
+    <CheckBox
+        android:id="@+id/chk_remember_me"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Remember Me"
+        android:layout_gravity="start"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp" />
+
     <Button
         android:id="@+id/btn_valider_auth"
         android:layout_width="277dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50sp"
+        android:layout_marginTop="30sp"
         android:text="Validate"
         android:textAlignment="center" />
 
