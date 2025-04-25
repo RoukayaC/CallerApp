@@ -2,11 +2,8 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="blue">#3E55CE</color>
-    <color name="notificationColor">#E61B1B</color>
-    <color name="soulignementColor">#E0E25E</color>
-    <color name="titre1">#24CBE0</color>
-    <color name="soutitre">#BA4782</color>
-
+    <color name="pink2">#9C27B0</color>
+    <color name="pink">#753668</color>
+    <color name="green">#8BC34A</color>
 
 </resources>
